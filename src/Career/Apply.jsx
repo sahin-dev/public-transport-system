@@ -4,10 +4,12 @@ import { useFormik } from 'formik';
 
 
 import { useState } from 'react';
+import PublicApi from "../Hooks/PublicApi";
 
 const Apply = () => {
 
     const [error, setError] = useState("")
+    const public_url = PublicApi()
 
 
     const formik = useFormik({
@@ -17,7 +19,7 @@ const Apply = () => {
             transportType: "",
             route: "",
             distance: "",
-            fareRate: "",
+            des: "",
             brta: "",
 
 
@@ -37,8 +39,8 @@ const Apply = () => {
             if (!values.distance) {
                 errors.distance = 'Required Distance';
             }
-            if (!values.fareRate) {
-                errors.fareRate = 'Required FareRate';
+            if (!values.des) {
+                errors.des = 'Required Description';
             }
             if (!values.brta) {
                 errors.brta = 'Required licence';
@@ -50,7 +52,13 @@ const Apply = () => {
         },
         onSubmit: values => {
             setError("")
-
+            public_url.post("/api/user/owner/add_vehicle")
+            .then((res)=>{
+                console.log(res);
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
             console.log(values);
 
         }
@@ -72,7 +80,7 @@ const Apply = () => {
                         <form onSubmit={formik.handleSubmit} className="card-body">
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-lg font-bold">Business Name</span>
+                                    <span className="label-text text-lg font-bold">Transport Name</span>
                                 </label>
                                 <input type="text" id="busineesName" name="busineesName" placeholder="Business Name" onChange={formik.handleChange}
                                     value={formik.values.busineesName} className="input input-bordered" required />
@@ -97,22 +105,14 @@ const Apply = () => {
                                 {formik.touched.route && formik.errors.route && <p className='text-red-500'>{formik.errors.route}</p>}
 
                             </div>
+                          
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-lg font-bold">Distance</span>
+                                    <span className="label-text text-lg font-bold">Description</span>
                                 </label>
-                                <input type="number" id="distance" name="distance" placeholder="Distance" onChange={formik.handleChange}
-                                    value={formik.values.distance} className="input input-bordered" required />
-                                {formik.touched.distance && formik.errors.distance && <p className='text-red-500'>{formik.errors.distance}</p>}
-
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text text-lg font-bold">Fare Rate</span>
-                                </label>
-                                <input type="number" id="fareRate" name="fareRate" placeholder="fareRate" onChange={formik.handleChange}
-                                    value={formik.values.fareRate} className="input input-bordered" required />
-                                {formik.touched.fareRate && formik.errors.fareRate && <p className='text-red-500'>{formik.errors.fareRate}</p>}
+                                <input type="text" id="des" name="des" placeholder="Description" onChange={formik.handleChange}
+                                    value={formik.values.des} className="input input-bordered" required />
+                                {formik.touched.des && formik.errors.des && <p className='text-red-500'>{formik.errors.des}</p>}
 
                             </div>
                             <div className="form-control">
